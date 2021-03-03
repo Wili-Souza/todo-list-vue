@@ -11,13 +11,15 @@ export default class NoteService {
             })
     }
 
-    add_or_update (note) {
-        if (note._id) {
+    add (note) {
+        return this._resource
+            .save(note)
+    }
+
+    update (id, note) {
+        if (id) {
             return this._resource
-                .update({id: note._id}, note)
-        } else {
-            return this._resource
-                .save(note)
+                .update({ id }, note)
         }
     }
 

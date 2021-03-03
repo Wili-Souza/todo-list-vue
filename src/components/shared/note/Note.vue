@@ -1,22 +1,27 @@
 <template>
     <div :class='type==="empty" ? show_form ? "note note-form" : "note empty-note" : "note"'>
         <div v-if='type!=="empty"' class='icons'>
-            <router-link to='#'>
-                <font-awesome-icon class='icon edit-icon' icon='edit'></font-awesome-icon>
-            </router-link>
+            <font-awesome-icon @click="show_edit_form" class='icon edit-icon' icon='edit'></font-awesome-icon>
             <font-awesome-icon @click="delete_note" class='icon trash-icon' icon='trash'></font-awesome-icon>
             
         </div>
         
         <div v-if='type==="empty"' :class='new_note_class'>
             <form @submit.prevent="save" v-if="show_form" class='form-content'>
-                <input class="note-input-title" v-model="note.title">
+                <input class="note-input-title" v-model="note.title" />
                 <textarea class="note-input-content" v-model="note.content"></textarea>
 
                 <form-button type="submit" class='float float-left' btnStyle="success" text="Create"></form-button>
                 <form-button @click="show_create" type="button" class='float float-right' btnStyle="danger" text="Cancel"></form-button>
             </form>
             <span v-else @click="show_create">+</span>
+        </div>
+        <div v-else-if="show_update">
+            <form @submit.prevent="update">
+                <input class="note-input-title" v-model="note.title"/>
+                <textarea class="note-input-content" v-model="note.content"></textarea>
+                <form-button type="submit" class='float float-center' btnStyle="success" text="Save"></form-button>
+            </form>
         </div>
         <div v-else>
             <h2>{{title}}</h2>
@@ -38,8 +43,8 @@ export default {
     props: ['title', 'content', 'id', 'type'],
 
     created () {
-        this.note.title = 'Title'
-        this.note.content = 'What do you have to do next?'
+        this.note.title = this.title || 'Title'
+        this.note.content = this.content || 'What do you have to do next?'
         this.service = new NoteService(this.$resource)
     },
 
@@ -47,6 +52,7 @@ export default {
         return {
             'new_note_class': 'new-note-button',
             'show_form': false,
+            'show_update': false,
             note: new Note()
         }
     },
@@ -62,14 +68,27 @@ export default {
             }
         },
 
+        show_edit_form () {
+            this.show_update = !this.show_update
+        },
+
         save () {
             this.service
-                .add_or_update(this.note)
+                .add(this.note)
                 .then(() => {
                     this.new_note = 'new-note-button'
                     this.show_form = false
                     this.note.title = 'Title'
                     this.note.content = 'What do you have to do next?'
+                    this.$root.$emit('reload')
+                })
+        },
+
+        update () {
+            this.service
+                .update(this.id.$oid, this.note)
+                .then(() => {
+                    this.show_edit_form()
                     this.$root.$emit('reload')
                 })
         },
@@ -87,6 +106,10 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+p {
+    word-break: break-all;
+}
 
 .note{
     font-family: 'Montserrat';
@@ -116,7 +139,8 @@ export default {
 .icon{
     font-size: 0.8rem;
     margin-left: 8px;
-    transition: all .1s
+    transition: all .1s;
+    cursor: pointer;
 }
 
 .trash-icon{
@@ -163,33 +187,30 @@ export default {
     transition: all .4s;
 }
 
-.note-form input, .note-form textarea {
-    background: rgb(37, 41, 44);
+input, textarea {
     width: 100%;
-    color: white;
     font-family: 'Montserrat';
     border-style: none;
 }
 
-.note-form input:focus, .note-form textarea:focus {
+.note-form input, .note-form textarea {
+    background: rgb(37, 41, 44);
+    color: white;
+}
+
+input:focus, textarea:focus {
     outline: none;
 }
 
-.form-content input{
+.note-input-title {
     margin: 1.2rem 0;
     font-weight: bold;
     font-size: 1.5rem;
 }
 
-.note-form textarea {
+.note-input-content {
     height: 10rem;
     resize: none;
-}
-
-.note-input-title {
-}
-
-.note-input-content {
     font-size: 1rem;
 }
 
@@ -205,6 +226,12 @@ export default {
 .float-right {
     bottom: -1rem;
     right: 2rem;
+}
+
+.float-center {
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-60%)
 }
 
 </style>
