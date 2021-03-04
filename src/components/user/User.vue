@@ -2,13 +2,27 @@
     <div class="dash-content">
         <div class="box user-info">
             <h2>Username: 
-                <font-awesome-icon @click="" class='icon edit-icon' icon='edit'></font-awesome-icon>
-                <span>{{user.username}}</span>
+                <div class="container" v-if="edit_name_mode">
+                    <font-awesome-icon @click="edit_mode('username')" class='icon close-icon' :icon="['fa', 'times-circle']"></font-awesome-icon>
+                    <font-awesome-icon @click="edit_data('username')" class='icon confirm-icon' :icon="['fa', 'check-circle']"></font-awesome-icon>
+                    <input class="user-input" v-model="input_username"/>
+                </div>
+                <div class="container" v-else>
+                    <font-awesome-icon @click="edit_mode('username')" class='icon edit-icon' icon='edit'></font-awesome-icon>
+                    <span >{{user.username}}</span>
+                </div>
             </h2>
             
             <h2>Email: 
-                <font-awesome-icon @click="" class='icon edit-icon' icon='edit'></font-awesome-icon>
-                <span>{{user.email}}</span>
+                <div class="container" v-if="edit_email_mode">
+                    <font-awesome-icon @click="edit_mode('email')" class='icon close-icon' :icon="['fa', 'times-circle']"></font-awesome-icon>
+                    <font-awesome-icon @click="edit_data('email')" class='icon confirm-icon' :icon="['fa', 'check-circle']"></font-awesome-icon>
+                    <input class="user-input" v-model="input_email"/>
+                </div>
+                <div class="container" v-else>
+                    <font-awesome-icon @click="edit_mode('email')" class='icon edit-icon' icon='edit'></font-awesome-icon>
+                    <span>{{user.email}}</span>
+                </div>
             </h2>
         </div>
         <div class="box account-info">
@@ -31,6 +45,11 @@ export default {
 
     data () {
         return {
+            'edit_name_mode': false,
+            'edit_email_mode': false,
+
+            'input_username': '',
+            'input_email': '',
             user: new User
         }
     },
@@ -39,23 +58,52 @@ export default {
         if (!this.$store.state.token) {
             this.$router.push({name: 'login'})
         } else {
-            this.service = new UserService(this.$resource)
-            this.service
-                .get()
-                .then(res => {
-                    this.user.username = res.username
-                    this.user.email = res.email
-                }, err => console.log(err))
+           this.get_user_data()
         }
     },
 
 
     methods: {
+        get_user_data () {
+             this.service = new UserService(this.$resource)
+            this.service
+                .get()
+                .then(res => {
+                    this.user.username = res.username
+                    this.input_username = res.username
+
+                    this.user.email = res.email
+                    this.input_email = res.email
+                }, err => console.log(err))
+        },
+
         reset_password () {
             this.authService = new AuthService(this.$resource)
             this.authService
                 .recover_password(this.user)
                 .then(res => console.log('email enviado'))
+        },
+
+        edit_mode (value) {
+             if (value == 'username') {
+                this.edit_name_mode = !this.edit_name_mode 
+            } else {
+                this.edit_email_mode = !this.edit_email_mode
+            }
+        },
+
+        edit_data (value) {
+            this.data = {
+                [value]: (value == 'username' ? this.input_username : this.input_email )
+            }
+
+            this.service
+                .update(this.data)
+                .then(() => {
+                    this.edit_mode(value)
+                    this.get_user_data()
+
+                })
         }
     }
 }
@@ -87,22 +135,59 @@ export default {
 
 .user-info span {
     color: rgb(255, 180, 0);
+}
+
+.container {
     float: right;
+}
+
+.user-input {
+    height: 2rem;
+    text-align: right;
+    padding-left: 0.7rem;
+    color: rgb(255, 180, 0);
+    font-family: 'Montserrat';
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-style: none;
+    box-shadow: 1px 1px 4px rgba(141, 141, 141, 0.4);
+}
+
+.user-input:focus {
+    outline: none;
+    box-shadow: 1px 1px 4px rgba(141, 141, 141, 0.8);
+
 }
 
 .icon {
     color: rgba(0, 0, 0, 0.3);
-    margin: 0.5rem;
+    margin: 0.5rem 0 0.5rem 0.5rem;
     font-size: 0.9rem;
     cursor: pointer;
+    float: right;
 }
 
 .icon:hover{
     color: black;
 }
 
+.confirm-icon {
+    color: rgba(41, 165, 41,.3);
+}
+
+.confirm-icon:hover {
+    color: rgb(41, 165, 41);
+}
+
+.close-icon {
+    color: rgba(165, 45, 41, 0.3);
+}
+
+.close-icon:hover {
+    color: rgb(165, 45, 41);
+}
+
 .edit-icon {
-    float: right;
 }
 
 .account-info {

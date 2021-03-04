@@ -5,10 +5,10 @@ import VueResource from 'vue-resource'
 import store from './store/store.js'
 import { routes } from './routes'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add([ faEdit, faTrash])
+library.add([ faEdit, faTrash, faTimesCircle, faCheckCircle])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

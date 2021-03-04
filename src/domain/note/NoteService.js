@@ -27,9 +27,6 @@ export default class NoteService {
         console.log(id)
         return this._resource
             .delete({ id })
-            .then(null, error => {
-                console.log(error)
-            })
     }
 
 }

@@ -11,8 +11,12 @@ export default class NoteService {
             })
     }
 
-    update (id, note) {
-        //
+    update (data) {
+        return this._resource
+            .update(data)
+            .then(res => res.json(), error => {
+                console.log(error)
+            })
     }
 
     remove (id) {
