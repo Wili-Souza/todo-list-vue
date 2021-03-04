@@ -5,16 +5,20 @@
                 <div class="card-option">Tasks<div class="border"></div></div>
             </router-link>
 
+            <router-link v-if="loggedIn" :to="{name: 'user'}">
+                <div class="card-option">Account<div class="border"></div></div>
+            </router-link>
+
+            <router-link v-if="loggedIn" :to="{name: 'logout'}">
+                <div class="card-option">logout<div class="border"></div></div>
+            </router-link>
+
             <router-link v-if="!loggedIn" :to="{name: 'login'}">
                 <div class="card-option">Login<div class="border"></div></div>
             </router-link>
 
             <router-link v-if="!loggedIn"  :to="{name: 'register'}">
                 <div class="card-option">Register<div class="border"></div></div>
-            </router-link>
-
-            <router-link v-if="loggedIn" :to="{name: 'logout'}">
-                <div class="card-option">logout<div class="border"></div></div>
             </router-link>
         </ul>
     </div>

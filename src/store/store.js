@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import UserService from '../domain/user/UserService.js'
+import AuthService from '../domain/user/AuthService.js'
 
 Vue.use(Vuex)
 
@@ -28,7 +28,7 @@ export default new Vuex.Store({
     actions: {
         login(context, user) {
             return new Promise((resolve, reject) => {
-                const service = new UserService(Vue.resource)
+                const service = new AuthService(Vue.resource)
                 service
                     .login(user)
                     .then(res => {

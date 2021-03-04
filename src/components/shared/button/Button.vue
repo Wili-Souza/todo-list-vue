@@ -31,12 +31,17 @@ export default {
     font-family: 'Montserrat';
     font-size: 0.9rem;
     font-weight: bold;
-    background: white;
+    background: rgb(46, 125, 179);
+    color: white;
     border-style: none;
     border-radius: 3px;
     margin: 0.5rem;
     height: 1.5rem;
     cursor: pointer;
+}
+
+.button:hover {
+    background: rgb(38, 97, 136);
 }
 
 .button:focus {
@@ -51,6 +56,13 @@ export default {
 .big {
     font-size: 1.2rem;
     width: 50%;
+    height: 2.4rem;
+    border-radius: 10px;
+}
+
+.mid {
+    font-size: 1rem;
+    width: 13rem;
     height: 2.4rem;
     border-radius: 10px;
 }

@@ -23,7 +23,7 @@
 
 <script>
 import User from '../../../domain/user/User.js'
-import UserService from '../../../domain/user/UserService.js'
+import AuthService from '../../../domain/user/AuthService.js'
 import Button from '../button/Button.vue'
 
 export default {
@@ -50,11 +50,10 @@ export default {
     methods: {
         save () {
             if (this.register) {
-                this.service = new UserService(this.$resource)
+                this.service = new AuthService(this.$resource)
                 this.service
                 .register(this.user)
                 .then(() => {
-                    console.log('registered')
                     this.$router.push({name: "login"})
                 })
 

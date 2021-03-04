@@ -1,15 +1,22 @@
-export default class UserService {
+export default class NoteService {
     constructor(resource) { // resource comes from VueResource
-        this._resource = resource
+        this._resource = resource("api/user")
     }
 
-    login (user) {
-        return this._resource("api/auth/login")
-            .save(user)
+    get () {
+        return this._resource
+            .query()
+            .then(res => res.json(), error => {
+                console.log(error)
+            })
     }
 
-    register (user) {
-        return this._resource("api/auth/signup")
-            .save(user)
+    update (id, note) {
+        //
     }
+
+    remove (id) {
+       //
+    }
+
 }
