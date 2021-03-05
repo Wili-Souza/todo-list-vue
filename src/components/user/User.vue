@@ -27,7 +27,7 @@
         </div>
         <div class="box account-info">
             <form-button @click="reset_password" type="button" btnStyle="mid" text="Change password"></form-button>
-            <form-button class="right-button" type="button" btnStyle="mid danger" text="Delete account"></form-button>
+            <form-button @click="delete_user" class="right-button" type="button" btnStyle="mid danger" text="Delete account"></form-button>
         </div>
     </div>
 </template>
@@ -81,7 +81,11 @@ export default {
             this.authService = new AuthService(this.$resource)
             this.authService
                 .recover_password(this.user)
-                .then(res => console.log('email enviado'))
+                .then(res => {
+                    alert('Email sent with recovery information.')
+                }, err => {
+                    alert("We're having some problems, please try again later.")
+                })
         },
 
         edit_mode (value) {
@@ -102,8 +106,19 @@ export default {
                 .then(() => {
                     this.edit_mode(value)
                     this.get_user_data()
-
                 })
+        },
+
+        delete_user () {
+            const message = `This will delete your account, you will lose all your data!
+            Do you want to continue?`
+            if(confirm(message)){
+                this.service
+                    .remove()
+                    .then(() => {
+                        this.$router.push({name: 'logout'})
+                    })
+            }
         }
     }
 }

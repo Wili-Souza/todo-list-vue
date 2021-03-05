@@ -19,8 +19,9 @@ export default class NoteService {
             })
     }
 
-    remove (id) {
-       //
+    remove () {
+        return this._resource
+            .delete()
     }
 
 }

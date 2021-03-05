@@ -46,7 +46,6 @@ export default {
 
 .button:focus {
     outline: none;
-    color: white;
 }
 
 .button:active {

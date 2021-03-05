@@ -94,11 +94,14 @@ export default {
         },
 
         delete_note () {
-            this.service
-                .remove(this.id.$oid)
-                .then(() => {
-                    this.$root.$emit('reload')
-                })
+            const message = `Are you sure you want to delete this note? It can't be restored.`
+            if(confirm(message)){
+                this.service
+                    .remove(this.id.$oid)
+                    .then(() => {
+                        this.$root.$emit('reload')
+                    })
+            }
         }
     }
 }
