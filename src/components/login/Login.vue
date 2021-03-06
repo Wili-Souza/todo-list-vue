@@ -22,7 +22,13 @@ export default {
 
 <style>
 .login-page{
-    margin-left: 20%;
-    padding-top: 10rem;
+    margin-left: 25%;
+    padding-top: 7rem;
+}
+
+@media (max-width: 930px) {
+    .login-page{
+        padding-top: 2rem;
+    }
 }
 </style>

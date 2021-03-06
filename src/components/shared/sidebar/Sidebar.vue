@@ -97,4 +97,15 @@ a{
 .card-option:hover .border {
     height: 100%;
 }
+
+@media (max-width: 510px) {
+    .sidebar {
+        width: 25%;
+    }
+
+    .card-option {
+        font-size: 1rem;
+        word-break: break-all;
+    }
+}
 </style>

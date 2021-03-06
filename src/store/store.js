@@ -39,7 +39,6 @@ export default new Vuex.Store({
                         resolve(res)
     
                     }, err => {
-                        console.log(err)
                         reject(err)
                     })
             })

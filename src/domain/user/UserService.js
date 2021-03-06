@@ -6,16 +6,15 @@ export default class NoteService {
     get () {
         return this._resource
             .query()
-            .then(res => res.json(), error => {
-                console.log(error)
-            })
+            .then(res => res.json())
     }
 
     update (data) {
         return this._resource
             .update(data)
-            .then(res => res.json(), error => {
-                console.log(error)
+            .then(res => res.json(), err => {
+                console.log(err.status)
+                throw new Error(err)
             })
     }
 

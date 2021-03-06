@@ -6,11 +6,20 @@ export default class UserService {
     login (user) {
         return this._resource("api/auth/login")
             .save(user)
+            .catch(err => {
+                throw new Error(err.body.error)
+            })
+       
     }
 
     register (user) {
         return this._resource("api/auth/signup")
             .save(user)
+            .catch(err => {
+                throw new Error(
+                    err.body.error ? err.body.error : err.body.message
+                )
+            })
     }
 
     recover_password (user) {
@@ -21,5 +30,14 @@ export default class UserService {
     reset_password (data) {
         return this._resource("api/auth/reset")
             .save(data)
+            .catch(err => {
+                if (err.status == 500) {
+                    throw new Error('This link has expired, access your account to get a new one.')
+                } 
+                
+                throw new Error(
+                    err.body.error ? err.body.error : err.body.message
+                )
+            })
     } 
 }

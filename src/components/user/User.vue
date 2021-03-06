@@ -26,8 +26,8 @@
             </h2>
         </div>
         <div class="box account-info">
-            <form-button @click="reset_password" type="button" btnStyle="mid" text="Change password"></form-button>
-            <form-button @click="delete_user" class="right-button" type="button" btnStyle="mid danger" text="Delete account"></form-button>
+            <form-button @click="reset_password" class="btn" type="button" btnStyle="mid" text="Change password"></form-button>
+            <form-button @click="delete_user" class="btn right-button" type="button" btnStyle="mid danger" text="Delete account"></form-button>
         </div>
     </div>
 </template>
@@ -97,8 +97,22 @@ export default {
         },
 
         edit_data (value) {
+            if (value == 'username') {
+                if(this.input_username != null && this.input_username != '') {
+                    this.field = this.input_username
+                } else {
+                    alert(`Invalid ${value}`)
+                }
+            } else {
+                if(this.input_email != null && this.input_email != '') {
+                    this.field = this.input_email
+                } else {
+                    alert(`Invalid ${value}`)
+                }
+            }
+
             this.data = {
-                [value]: (value == 'username' ? this.input_username : this.input_email )
+                [value]: this.field
             }
 
             this.service
@@ -106,6 +120,8 @@ export default {
                 .then(() => {
                     this.edit_mode(value)
                     this.get_user_data()
+                }, err => {
+                    alert(`This ${value} already exists.`)
                 })
         },
 
@@ -127,12 +143,16 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
 
+span, input {
+    word-break: break-all;
+}
+
 .dash-content{
     font-family: 'Montserrat';
     margin: 0;
     width: 65%;
     display: inline-block;
-    margin-left: 20%;
+    margin-left: 25%;
     padding: 4%;
     vertical-align: top;
 }
@@ -202,15 +222,78 @@ export default {
     color: rgb(165, 45, 41);
 }
 
-.edit-icon {
-}
-
 .account-info {
     background: rgba(255, 255, 255, 0.6);
 }
 
 .right-button {
     float: right;
+}
+
+@media (max-width: 1147px) {
+    .box {
+        padding: 1rem 15%;
+    }
+}
+
+@media (max-width: 990px) {
+    .box {
+        padding: 1rem 5%;
+    }
+}
+
+@media (max-width: 770px) {
+    .box {
+        padding: 1rem 5%;
+    }
+
+    .right-button {
+        float: none;
+    }
+
+    .container {
+        float: none;
+    }
+
+    .user-input {
+        text-align: left;
+        width: 80%
+    }
+
+    .btn {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 500px) {
+    span, .user-input, h2 {
+        font-size: 1.2rem;
+    }
+
+    h2 {
+        position: relative;
+        line-height: 2;
+    }
+
+    .user-input {
+        text-align: left;
+    }
+
+    .close-icon, .confirm-icon {
+        float: none;
+        position: absolute;
+        right: 0;
+    }
+
+    .close-icon {
+        top: 1.6rem;
+    }
+
+    .confirm-icon {
+        bottom: -0.6rem;
+    }
 }
 
 </style>

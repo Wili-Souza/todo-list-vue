@@ -93,4 +93,16 @@ export default {
     background: rgb(255, 180, 0);
 }
 
+
+
+@media (max-width: 450px) {
+    .account {
+       width: 85%;
+    }
+
+    .mid {
+        width: 11rem;
+    }
+}
+
 </style>

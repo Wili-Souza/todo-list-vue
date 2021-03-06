@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import store from './store/store.js'
 import { routes } from './routes'
+import './rules.js';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEdit, faTrash, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

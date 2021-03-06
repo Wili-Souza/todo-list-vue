@@ -1,15 +1,32 @@
 <template>
     <div class="dash-reset">
-        <div @submit.prevent="reset" class="box">
-            <form class="reset-form">
-                <label for="password">New password:</label>
-                <input v-model="new_pass" id="password" /><br><br>
+        <div class="box">
+            <div class="errors_api">
+                <p class="error_api" v-for="err of api_errors">{{ err }}</p>
+            </div>
+            <ValidationObserver v-slot="{ handleSubmit }">
+                <form @submit.prevent="handleSubmit(reset)" class="reset-form">
+                    <div class="control">
+                        <label for="password">New password:</label>
+                        <ValidationProvider rules="required|min:8|max:120" v-slot="{ errors }">
+                            <input type="password" v-model="new_pass" id="password" />
+                            <span class="error">{{ errors[0] }}</span>
+                        </ValidationProvider>
+                    </div>
+                    
+                    <br><br>
+                    
+                    <div class="control">
+                        <label for="confirmation">Confirm password:</label>
+                        <ValidationProvider rules="required" v-slot="{ errors }">
+                            <input type="password" v-model="confirm_pass" id="confirmation" />
+                            <span class="error">{{ errors[0] }}</span>
+                        </ValidationProvider>
+                    </div>
 
-                <label for="confirm">Confirm password:</label>
-                <input v-model="confirm_pass" id="confirm" />
-
-                <form-button class="button" type="submit" btnStyle="mid" text="Save"></form-button>
-            </form>
+                    <form-button class="button" type="submit" btnStyle="mid" text="Save"></form-button>
+                </form>
+            </ValidationObserver>
         </div>
     </div>
 </template>
@@ -17,16 +34,20 @@
 <script>
 import Button from '../shared/button/Button.vue'
 import AuthService from '../../domain/user/AuthService.js'
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 export default {
     components: {
-        'form-button': Button
+        'form-button': Button,
+        ValidationProvider,
+        ValidationObserver
     },
 
     data () {
         return {
             'new_pass': null,
-            'confirm_pass': null
+            'confirm_pass': null,
+            'api_errors': []
         }
     },
 
@@ -37,14 +58,20 @@ export default {
     methods: {
         reset () {
             if (this.new_pass == this.confirm_pass) {
+                this.api_errors = []
                 this.service
                     .reset_password({
                         'reset_token': this.$route.params.token,
                         'password': this.new_pass
                     })
+                    .then(() => {
+                        alert('Password changed!')
+                        this.$router.push({name: 'login'})
+                    }, err => {
+                        this.api_errors.push(err)
+                    })
             } else {
-                console.log("erro")
-                // erro 
+                this.api_errors.push('The passwords need to match.')
             }
         }
     }
@@ -58,7 +85,7 @@ export default {
     font-family: 'Montserrat';
     margin: 0;
     width: 65%;
-    margin-left: 20%;
+    margin-left: 25%;
     padding: 4%;
     vertical-align: top;
 }
@@ -84,11 +111,11 @@ label {
 
 input {
     height: 2rem;
-    width: 50%;
+    width: 100%;
     border-style: none;
     border-radius: 5px;
     box-shadow: 1px 1px 4px rgba(141, 141, 141, 0.5);
-    float: right;
+    display: block;
     font-family: 'Montserrat';
     font-size: 1rem;
     padding-left: 0.5rem
@@ -104,6 +131,48 @@ input:focus{
     top: 2rem;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.control {
+    position: relative;
+}
+
+.error {
+    font-family: 'Montserrat';
+    font-size: 0.8rem;
+    position: absolute;
+    color: rgb(231, 68, 62);
+    bottom: -1.3rem;
+}
+
+.errors_api {
+    margin: -0.5rem auto 2rem 2rem;
+}
+
+.error_api{
+    color: rgb(231, 68, 62);
+    word-break: break-all;
+    display: block;
+    margin: -0.5rem auto 2rem auto;
+}
+
+@media (max-width: 1230px) {
+   .reset-form {
+        width: 90%;
+   }
+}
+
+@media (max-width: 1050px) {
+   input {
+       float: none;
+       display: block;
+       margin-top: 1rem;
+       width: 90%;
+   }
+
+    .errors_api {
+        margin: -0.5rem auto 2rem auto;
+    }
 }
 
 </style>

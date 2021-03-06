@@ -1,5 +1,5 @@
 <template>
-    <div class='login-page'>
+    <div class='register-page'>
         <login-form :register="true"></login-form>
     </div>
 </template>
@@ -22,9 +22,15 @@ export default {
 }
 </script>
 
-<style>
-.login-page{
-    margin-left: 20%;
+<style scoped>
+.register-page{
+    margin-left: 25%;
     padding-top: 6rem;
+}
+
+@media (max-width: 930px) {
+    .register-page{
+        padding-top: 2rem;
+    }
 }
 </style>

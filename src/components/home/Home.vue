@@ -62,7 +62,7 @@ export default {
 .dash-notes{
     margin: 0;
     display: inline-block;
-    margin-left: 20%;
+    margin-left: 25%;
     vertical-align: top;
 }
 </style>

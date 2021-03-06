@@ -81,6 +81,8 @@ export default {
                     this.note.title = 'Title'
                     this.note.content = 'What do you have to do next?'
                     this.$root.$emit('reload')
+                }, err => {
+                    alert('Unexpected error, try again later.')
                 })
         },
 
@@ -90,6 +92,8 @@ export default {
                 .then(() => {
                     this.show_edit_form()
                     this.$root.$emit('reload')
+                }, err => {
+                    alert('Unexpected error, try again later.')
                 })
         },
 
@@ -100,7 +104,9 @@ export default {
                     .remove(this.id.$oid)
                     .then(() => {
                         this.$root.$emit('reload')
-                    })
+                    }, err => {
+                    alert('Unexpected error, try again later.')
+                })
             }
         }
     }
@@ -235,6 +241,28 @@ input:focus, textarea:focus {
     bottom: -1rem;
     left: 50%;
     transform: translateX(-60%)
+}
+
+@media (max-width: 641px) {
+    .note {
+        width: 25%
+    }
+
+    .float-left {
+        bottom: -1rem;
+        left: 0.5rem;
+    }
+
+    .float-right {
+        bottom: -1rem;
+        right: 0.5rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .note {
+        width: 67%
+    }
 }
 
 </style>
