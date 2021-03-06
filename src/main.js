@@ -16,7 +16,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.http.options.root = process.env.API_URL ? process.env.API_URL : 'http://127.0.0.1:5000/';
+Vue.http.options.root = process.env.API_URL ? process.env.API_URL : 'https://todo-list-flask-api.herokuapp.com/';
 
 Vue.http.interceptors.push((request, next) => {
   request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('access_token'))
